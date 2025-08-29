@@ -67,11 +67,11 @@ export function Chat() {
         body: JSON.stringify({ message: content.trim() }),
       });
 
+      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const serverMsg = typeof data?.error === 'string' ? `: ${data.error}` : '';
+        throw new Error(`HTTP error ${response.status}${serverMsg}`);
       }
-
-      const data = await response.json();
       
       if (data.error) {
         throw new Error(data.error);
